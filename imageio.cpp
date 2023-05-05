@@ -50,26 +50,27 @@ void writeImage(std::string filename, int image[MAX_H][MAX_W], int height, int w
 	ofstream ostr;
 	ostr.open(filename);
 	if (ostr.fail()) {
-		cout << "Unable to write file\n";
+		std::cout << "Unable to write file\n";
 		exit(1);
-	};
+	}
 
 	// print the header
-	ostr << "P2" << endl;
+	ostr << "P2\n";
 	// width, height
 	ostr << width << ' ';
-	ostr << height << endl;
-	ostr << 255 << endl;
+	ostr << height << std::endl;
+	ostr << 255 << std::endl;
 
 	for (int row = 0; row < height; row++) {
 		for (int col = 0; col < width; col++) {
-			assert(image[row][col] < 256);
-			assert(image[row][col] >= 0);
+			if (image[row][col] < 0 || image[row][col] >= 256) {
+				std::cerr << "Invalid pixel value: " << row << ", col " << col << ": " << image[row][col] << std::endl;
+				exit(1);
+			}
 			ostr << image[row][col] << ' ';
-			ostr << endl;
 		}
+		ostr << std::endl;
 	}
 	ostr.close();
-	return;
 }
 
